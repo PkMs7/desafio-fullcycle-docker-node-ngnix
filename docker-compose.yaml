@@ -8,12 +8,12 @@ services:
       dockerfile: Dockerfile.server
     image: patrickmarquesdev/fullcycle:nginx
     container_name: nginx
-    networks:
-      - fc-node-nginx
     ports:
       - "8080:80"
     depends_on:
       - app
+    networks:
+      - fc-node-nginx
 
   app:
     build:
