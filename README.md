@@ -18,3 +18,13 @@ Nesse desafio você colocará em prática o que aprendemos em relação a utiliz
 4. Suba tudo em um repositório e faça a entrega.
 
 **Importante** A linguagem de programação para este desafio é Node/JavaScript.
+
+## Comandos Docker-Compose
+
+**Gerar o Build das Imagens e Subir os Containers**
+
+```docker-compose up --build -d```
+
+## Docker Hub
+
+-> [Repositório das Imagens do Desafio no Docker Hub](https://hub.docker.com/r/patrickmarquesdev/fullcycle)

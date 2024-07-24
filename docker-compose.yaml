@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+
+  nginx:
+    build:
+      context: app/server
+      dockerfile: Dockerfile.server
+    image: patrickmarquesdev/fullcycle:nginx
+    container_name: nginx
+    networks:
+      - fc-node-nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - app
+
+  app:
+    build:
+      context: ./app/
+      dockerfile: Dockerfile.node
+    image: patrickmarquesdev/fullcycle:node
+    container_name: app
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh
+    volumes:
+      - ./app:/usr/src/app
+      - /usr/src/app/node_modules
+    tty: true
+    command: ["node", "index.js"]
+    depends_on:
+      - db
+    networks:
+      - fc-node-nginx
+
+  db:
+    image: mysql:5.7
+    command: --innodb-use-native-aio=0
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      - ./app/db/mysql:/var/lib/mysql
+      - ./app/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - fc-node-nginx
+
+networks:
+  fc-node-nginx:
+    driver: bridge
